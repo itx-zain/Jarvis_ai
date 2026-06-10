@@ -337,7 +337,7 @@ def smart_open(query):
         subprocess.Popen(cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return f"Opening {query}"
 
-    # 2. Fuzzy aliass
+    # 2. Fuzzy alias
     alias_match, alias_score = process.extractOne(query, APP_ALIASES.keys())
     if alias_score >= 82:
         cmd = APP_ALIASES[alias_match]
