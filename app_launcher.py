@@ -370,4 +370,3 @@ def smart_open(query):
                      shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     return f"Could not find '{query}', searching on Google"
 
-#Empty commit
