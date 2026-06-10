@@ -369,3 +369,5 @@ def smart_open(query):
     subprocess.Popen(f'google-chrome "https://www.google.com/search?q={encoded}"',
                      shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     return f"Could not find '{query}', searching on Google"
+
+#Empty commit
