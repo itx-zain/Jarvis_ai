@@ -276,11 +276,13 @@ def launch_app(query):
             print(f"[APP] Action: Bringing {match} to focus")
             return True, f"{match} is already open, bringing to focus"
         else:
+            
             # Process exists but no visible window, or not running at all — launch
             print(f"[APP] Action: Launching {match}")
             subprocess.Popen(cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             return True, f"Opening {match}"
     return False, f"App '{query}' not found"
+
 
 
 def open_website(query):

@@ -8,12 +8,42 @@ import json
 import re
 import os
 import subprocess
+import time
 import requests
 import speak as _speak_module
 import system_control as sc
 import browser as br
+import weather
 from app_launcher import smart_open, open_website, whatsapp_send_message
 from action_registry import build_system_prompt, detect_intent_group
+
+
+# ─── MULTI-COMMAND PARSER ───
+_MULTI_SEPARATORS = [" and ", " then ", " also ", " phir ", " aur ", " fir ", ", "]
+
+
+def parse_multi_command(command: str) -> list:
+    """
+    Split a command into multiple sub-commands based on separators.
+    
+    Examples:
+        "open youtube and take screenshot" → ["open youtube", "take screenshot"]
+        "open downloads aur open documents" → ["open downloads", "open documents"]
+    """
+    if not command or len(command.strip()) < 2:
+        return [command]
+
+    parts = [command]
+    for sep in _MULTI_SEPARATORS:
+        new_parts = []
+        for part in parts:
+            new_parts.extend([p.strip() for p in part.split(sep) if p.strip()])
+        if len(new_parts) > len(parts):
+            parts = new_parts
+    
+    # Filter out empty/invalid parts
+    parts = [p for p in parts if p and len(p.strip()) > 1]
+    return parts
 
 def speak(text):
     """Proxy so server.py can patch _speak_module.speak at runtime."""
@@ -371,6 +401,11 @@ def _execute_action(action: str, target: str) -> str:
     if action == "get_ip":      return sc.get_ip()
     if action == "get_disk":    return sc.get_disk()
 
+    # ── Weather ──
+    if action == "weather":
+        result = weather.get_weather(target)
+        return result
+
     # ── Screen & Windows ──
     if action == "screenshot":
         fname = sc.screenshot()
@@ -423,22 +458,46 @@ def _execute_action(action: str, target: str) -> str:
 
 
 # ─── MAIN ENTRY POINT ───
-def execute_llm_action(command: str) -> bool:
+def _process_single_command(command: str) -> str:
+    """Process a single command through Ollama and return the action result."""
     llm_response = _call_ollama(command)
-
-    reply  = llm_response.get("reply", "Done")
+    reply = llm_response.get("reply", "Done")
     action = llm_response.get("action", "")
     target = llm_response.get("target", "")
-
     speak(reply)
-
     if action and action != "chat":
         try:
             result = _execute_action(action, target)
             if result and result.lower() != reply.lower():
                 speak(result)
+            return result or reply
         except Exception as e:
             print(f"Action execution error: {e}")
             speak("Sorry, I could not complete that action.")
+            return "Error"
+    return reply
 
+
+def execute_llm_action(command: str) -> bool:
+    # Check for multi-command
+    parts = parse_multi_command(command)
+    
+    if len(parts) > 1:
+        print(f"[MULTI COMMAND DETECTED]")
+        for i, part in enumerate(parts, 1):
+            print(f"Part {i}: {part}")
+        
+        all_replies = []
+        for i, part in enumerate(parts, 1):
+            print(f"[ACTION {i}] Processing: {part}")
+            result = _process_single_command(part)
+            all_replies.append(result)
+            if i < len(parts):
+                time.sleep(1)  # Delay between actions
+        
+        print(f"[MULTI COMMAND COMPLETED] {len(parts)} actions executed")
+        return True
+    
+    # Single command - original behavior
+    _process_single_command(command)
     return True

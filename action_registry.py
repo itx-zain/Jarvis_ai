@@ -112,7 +112,7 @@ BROWSER_ACTIONS = {
     "whatsapp_message": {
         "desc": "Send a WhatsApp message (target format: contact:message)",
         "examples": [
-            "send message to Ahmad saying hello -> {\"reply\":\"Sending message\",\"action\":\"whatsapp_message\",\"target\":\"Ahmad:hello\"}",
+            "send message to Ahmad Raza Software House saying hello -> {\"reply\":\"Sending message\",\"action\":\"whatsapp_message\",\"target\":\"Ahmad:hello\"}",
         ],
     },
 }
@@ -138,6 +138,16 @@ SYSTEM_ACTIONS = {
     "shutdown":     {"desc": "Shutdown the system",    "examples": ["shutdown -> {\"reply\":\"Shutting down\",\"action\":\"shutdown\",\"target\":\"\"}"]},
     "restart":      {"desc": "Restart the system",     "examples": ["restart -> {\"reply\":\"Restarting\",\"action\":\"restart\",\"target\":\"\"}"]},
     "empty_trash":  {"desc": "Empty the trash",        "examples": ["empty trash -> {\"reply\":\"Emptying trash\",\"action\":\"empty_trash\",\"target\":\"\"}"]},
+    "weather":      {"desc": "Get weather for a city (or current location if no city)", "examples": [
+        "weather -> {\"reply\":\"Checking current weather\",\"action\":\"weather\",\"target\":\"\"}",
+        "weather in london -> {\"reply\":\"Checking weather in London\",\"action\":\"weather\",\"target\":\"london\"}",
+        "paris ka mausam batao -> {\"reply\":\"Paris ka mausam check kar raha hun\",\"action\":\"weather\",\"target\":\"paris\"}",
+        "tokyo weather -> {\"reply\":\"Checking weather in Tokyo\",\"action\":\"weather\",\"target\":\"tokyo\"}",
+        "berlin temperature -> {\"reply\":\"Checking temperature in Berlin\",\"action\":\"weather\",\"target\":\"berlin\"}",
+        "new york weather -> {\"reply\":\"Checking weather in New York\",\"action\":\"weather\",\"target\":\"new york\"}",
+        "mausam kaisa hai -> {\"reply\":\"Mausam check kar raha hun\",\"action\":\"weather\",\"target\":\"\"}",
+        "today weather -> {\"reply\":\"Today's weather check kar raha hun\",\"action\":\"weather\",\"target\":\"\"}",
+    ]},
 }
 
 WINDOW_ACTIONS = {
@@ -236,7 +246,7 @@ INTENT_KEYWORDS = {
     "FOLDER_ACTIONS":   ["downloads", "documents", "desktop", "pictures", "videos", "music", "folder", "directory", "dikhao"],
     "FILE_ACTIONS":     ["find", "file", "pdf", "doc", "txt", "dhoondo", "dhoond"],
     "BROWSER_ACTIONS":  ["website", "youtube", "play", "google", "whatsapp", "browser", "url", "http", "search", "lookup", "find online"],
-    "SYSTEM_ACTIONS":   ["battery", "volume", "brightness", "screenshot", "time", "date", "ram", "cpu", "wifi", "ip", "disk", "shutdown", "restart", "sleep", "lock", "mute", "trash"],
+    "SYSTEM_ACTIONS":   ["battery", "volume", "brightness", "screenshot", "time", "date", "ram", "cpu", "wifi", "ip", "disk", "shutdown", "restart", "sleep", "lock", "mute", "trash", "weather", "mausam", "temperature", "forecast", "rain", "baarish", "humidity", "wind"],
     "WINDOW_ACTIONS":   ["window", "minimize", "maximize", "tab", "scroll", "copy", "paste", "undo", "redo", "save", "refresh", "back", "forward", "type"],
     "PROJECT_ACTIONS":  ["project", "main.py", "server.py", "ai_fallback", "commands.py", ".py", "voice.ai", "python files", "python file"],
 }

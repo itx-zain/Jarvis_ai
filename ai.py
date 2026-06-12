@@ -8,6 +8,7 @@ from ai_fallback import execute_llm_action
 
 def ai_chat(command: str) -> None:
     if not command:
+
         return
 
     if any(w in command for w in ["hello", "hi", "hey"]):
